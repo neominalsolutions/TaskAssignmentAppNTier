@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaskAssigmentApp.Domain.Exception;
+using TaskAssigmentApp.Domain.Exceptions;
 using TaskAssigmentApp.Domain.Services;
 
 namespace TaskAssigmentApp.Domain.Entities
@@ -53,6 +54,11 @@ namespace TaskAssigmentApp.Domain.Entities
 
     }
 
+    public Ticket()
+    {
+
+    }
+
 
 
     /// <summary>
@@ -73,7 +79,7 @@ namespace TaskAssigmentApp.Domain.Entities
       }
       else if (!ticketAssignmentCheckService.TicketIsAssignable(employee, this))
       {
-        throw new MaximumAndMinimumTicketTrashholdOverFlowException();
+        throw new MaxsimumWorkOfWeekLimitOverFlowException();
       }
 
       employee.AddTicket(this);

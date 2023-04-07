@@ -15,19 +15,21 @@ namespace TaskAssignmentApp.Application.Handlers
   {
     private readonly ITicketAssignmentCheckService _ticketAssignmentCheckService;
     private readonly IEmployeeRepository _employeeRepository;
+    private readonly ITicketRepository _ticketRepository;
 
-    public TicketAssignmentHandler(ITicketAssignmentCheckService ticketAssignmentCheckService, IEmployeeRepository employeeRepository)
+    public TicketAssignmentHandler(ITicketAssignmentCheckService ticketAssignmentCheckService, IEmployeeRepository employeeRepository, ITicketRepository ticketRepository)
     {
       _employeeRepository = employeeRepository;
       _ticketAssignmentCheckService = ticketAssignmentCheckService;
+      _ticketRepository = ticketRepository;
     }
     public async Task<TicketAssignmentResponseDto> Handle(TicketAssignmentRequestDto request, CancellationToken cancellationToken)
     {
       var response = new TicketAssignmentResponseDto();
 
-      var employee = await _employeeRepository.WhereAsync(x => x.Id == request.EmployeeId);
+      var employees = await _employeeRepository.WhereAsync(x => x.Id == request.EmployeeId);
 
-      if (employee == null)
+      if (employees.Count == 0)
       {
         throw new EmployeeNotFoundException();
 
@@ -42,13 +44,17 @@ namespace TaskAssignmentApp.Application.Handlers
         // dto entity maplendi.
 
         var ticket = new Ticket(
-          description: "Ticket-1",
-          workingHour: 6,
-          startDate: DateTime.Now,
-          endDate: DateTime.Now);
+          description: request.Description,
+          workingHour: request.WorkingHour,
+          startDate: request.StartDate,
+          endDate: request.EndDate);
 
         ticket.Assign(
-          employee: employee[0], ticketAssignmentCheckService: _ticketAssignmentCheckService);
+          employee: employees[0], ticketAssignmentCheckService: _ticketAssignmentCheckService);
+
+       await _ticketRepository.Create(ticket);
+
+
       }
 
 

@@ -1,11 +1,14 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Reflection;
 using TaskAssigmentApp.Domain.Services;
 using TaskAssignmentApp.Application.Dtos;
 using TaskAssignmentApp.Application.Services;
 using TaskAssignmentApp.Application.Validators;
+using TaskAssignmentApp.Persistance.ORM.EntityFramework.Contexts;
+using TaskAssignmentAppNTier.Middlewares;
 using TaskAssignmentAppNTier.ServiceExtensions;
 
 namespace TaskAssignmentAppNTier
@@ -23,17 +26,24 @@ namespace TaskAssignmentAppNTier
       builder.Services.AddEndpointsApiExplorer();
       builder.Services.AddSwaggerGen();
 
-     
+
 
       // eðer uygulama içerisinde bir db baðlantýsý olacak servis ile çalýþýrsak bu durumda scoped servis tercihi yapalým.
       // scope serviceler dýþ kaynaklara baðlanýrken web request bazlý çalýþýr.
       // EF Core scope servisler ile tanýmlanmýþ, en performanslý çalýþma yöntemi scope service
-   
-      builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+      builder.Services.AddDbContext<TicketAppContext>(opt =>
+      {
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("TicketConn"));
+      });
+
       builder.Services.AddApplicationServices();
       builder.Services.AddTicketServices();
 
-      
+      // Middleware servisler handler servicler,sessionserviceler hep addTransient olarak tanýmlanmalýdýr. (Middleware handler,session request bazlý çalýþýr her bir istekte yeni instance alýnmasý gerekir.)
+      //builder.Services.AddTransient<IMiddleware, ExceptionMiddleware>();
+
+
 
 
 
@@ -50,11 +60,16 @@ namespace TaskAssignmentAppNTier
         app.UseSwaggerUI();
       }
 
+ 
       app.UseHttpsRedirection();
 
       app.UseAuthorization();
 
       app.MapControllers(); // request controllara düþsün diye
+
+
+      app.UseMiddleware<ExceptionMiddleware>();
+
 
       var summaries = new[]
       {

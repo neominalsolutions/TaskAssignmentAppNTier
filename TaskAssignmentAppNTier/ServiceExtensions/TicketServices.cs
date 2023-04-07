@@ -1,5 +1,6 @@
 ﻿using TaskAssigmentApp.Domain.Services;
 using TaskAssignmentApp.Application.Services;
+using TaskAssignmentApp.Infrastructure.ORM.EntityFramework;
 
 namespace TaskAssignmentAppNTier.ServiceExtensions
 {
@@ -14,7 +15,8 @@ namespace TaskAssignmentAppNTier.ServiceExtensions
     {
       services.AddScoped<ITicketAssignment, TicketAssignmentService>();
       services.AddScoped<ITicketAssignmentCheckService, TicketAssignmentWeeklyCheckService>();
-      services.AddScoped<ITicketRepository, TicketRepository>();
+      services.AddScoped<ITicketRepository, EFTicketRepository>();
+      services.AddScoped<IEmployeeRepository, EFEmployeeRepository>();
 
       return services;
     }

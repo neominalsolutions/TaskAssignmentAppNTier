@@ -24,18 +24,10 @@ namespace TaskAssignmentAppNTier.Controllers
     public async Task<IActionResult> AssignTicketApplicationLayer([FromBody] TicketAssignmentRequestDto dto)
     {
 
-      try
-      {
+     
         // mediator gelen request işlemek için send methodu kullanıyor
         var response = await _mediator.Send(dto);
         return Ok(response);
-      }
-      catch (Exception ex)
-      {
-
-        throw;
-      }
-
 
       // var response = mediator.HandleAsync(request);
    

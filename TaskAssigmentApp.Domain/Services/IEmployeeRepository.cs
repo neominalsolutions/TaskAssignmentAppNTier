@@ -10,5 +10,6 @@ namespace TaskAssigmentApp.Domain.Services
 {
   public interface IEmployeeRepository:IRepository<Employee>
   {
+    Task<Employee> FindByNameAsync(string name);
   }
 }

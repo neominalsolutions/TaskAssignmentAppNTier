@@ -12,6 +12,11 @@ namespace TaskAssigmentApp.Domain.Entities
     public string Name { get; private set; }
     public string SurName { get; private set; }
 
+    public Employee()
+    {
+
+    }
+
     public Employee(string name,string surname)
     {
       Id = Guid.NewGuid().ToString();

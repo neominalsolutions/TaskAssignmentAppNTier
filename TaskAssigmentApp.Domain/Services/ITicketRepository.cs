@@ -13,5 +13,6 @@ namespace TaskAssigmentApp.Domain.Services
   /// </summary>
   public interface ITicketRepository:IRepository<Ticket>
   {
+   
   }
 }
