@@ -7,42 +7,33 @@ using System.Threading.Tasks;
 using TaskAssigmentApp.Domain.Entities;
 using TaskAssigmentApp.Domain.Services;
 using TaskAssignmentApp.Application.Dtos;
+using TaskAssignmentApp.Application.Exceptions;
 
-namespace TaskAssignmentApp.Application.Services
+namespace TaskAssignmentApp.Application.Handlers
 {
-  // uygulamanın nasıl bir davranış ile görev verme işlemi yapıcağını koordine ediyorsunuz.
-  public class TicketAssignmentService : ITicketAssignment
+  public class TicketAssignmentHandler : IRequestHandler<TicketAssignmentRequestDto, TicketAssignmentResponseDto>
   {
-
-    // Facade Design Patter: Bir kopleks işi tek bir servis üzerinden daha anlaşılır bir şekilde encapsulate etme yöntemi
-
-
     private readonly ITicketAssignmentCheckService _ticketAssignmentCheckService;
     private readonly IEmployeeRepository _employeeRepository;
-    // Email Service yapıcaz
 
-    public TicketAssignmentService(ITicketAssignmentCheckService ticketAssignmentCheckService, IEmployeeRepository employeeRepository)
+    public TicketAssignmentHandler(ITicketAssignmentCheckService ticketAssignmentCheckService, IEmployeeRepository employeeRepository)
     {
-      _ticketAssignmentCheckService = ticketAssignmentCheckService;
       _employeeRepository = employeeRepository;
-
+      _ticketAssignmentCheckService = ticketAssignmentCheckService;
     }
-
-    // employee Repository bağlanıp ilgili employee find etmek lazım.
-
-    public async Task<TicketAssignmentResponseDto> HandleAsync(TicketAssignmentRequestDto request)
+    public async Task<TicketAssignmentResponseDto> Handle(TicketAssignmentRequestDto request, CancellationToken cancellationToken)
     {
       var response = new TicketAssignmentResponseDto();
 
-      var emp = new Employee(name: "Ali", surname: "Tan");
+      var employee = await _employeeRepository.WhereAsync(x => x.Id == request.EmployeeId);
 
-      var employee = await  _employeeRepository.WhereAsync(x=> x.Id == request.EmployeeId);
-
-      if(employee == null)
+      if (employee == null)
       {
+        throw new EmployeeNotFoundException();
+
         // application exception
         // böyle bir çalışan kaydı yok
-      } 
+      }
       else
       {
         //emp.Tickets1.cle
@@ -62,7 +53,6 @@ namespace TaskAssignmentApp.Application.Services
 
 
       return await Task.FromResult(response);
-
     }
   }
 }

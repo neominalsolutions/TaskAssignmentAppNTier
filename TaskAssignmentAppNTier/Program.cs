@@ -1,5 +1,12 @@
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using System.Data;
+using System.Reflection;
 using TaskAssigmentApp.Domain.Services;
+using TaskAssignmentApp.Application.Dtos;
 using TaskAssignmentApp.Application.Services;
+using TaskAssignmentApp.Application.Validators;
+using TaskAssignmentAppNTier.ServiceExtensions;
 
 namespace TaskAssignmentAppNTier
 {
@@ -16,15 +23,19 @@ namespace TaskAssignmentAppNTier
       builder.Services.AddEndpointsApiExplorer();
       builder.Services.AddSwaggerGen();
 
-      builder.Services.AddControllers(); // controller implemente olsun diye
+     
 
       // eðer uygulama içerisinde bir db baðlantýsý olacak servis ile çalýþýrsak bu durumda scoped servis tercihi yapalým.
       // scope serviceler dýþ kaynaklara baðlanýrken web request bazlý çalýþýr.
       // EF Core scope servisler ile tanýmlanmýþ, en performanslý çalýþma yöntemi scope service
-      builder.Services.AddScoped<ITicketAssignmentCheckService, TicketAssignmentWeeklyCheckService>();
-      builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+   
       builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-      builder.Services.AddScoped<ITicketAssignment, TicketAssignmentService>();
+      builder.Services.AddApplicationServices();
+      builder.Services.AddTicketServices();
+
+      
+
+
 
       // Web Socket, Redis Connection gibi tek bir instance ile çalýþacak isek Singleton, Validation,Session, Event Handling gibi durumlar için transient
 
