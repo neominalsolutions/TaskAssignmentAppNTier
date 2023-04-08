@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskAssigmentApp.Domain\TaskAssigmentApp.Domain.csproj" />
+    <ProjectReference Include="..\TaskAssignmentApp.Infrastructure\TaskAssignmentApp.Infrastructure.csproj" />
+    <ProjectReference Include="..\TaskAssignmentApp.Persistance\TaskAssignmentApp.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

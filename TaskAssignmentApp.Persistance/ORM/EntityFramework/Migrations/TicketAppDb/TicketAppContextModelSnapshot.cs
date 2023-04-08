@@ -3,19 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskAssignmentApp.Persistance.ORM.EntityFramework.Contexts;
 
 #nullable disable
 
-namespace TaskAssignmentApp.Persistance.TaskAssignmentApp.Persistance.ORM.EntityFramework.Migrations
+namespace TaskAssignmentApp.Persistance.ORM.EntityFramework.Migrations.TicketAppDb
 {
     [DbContext(typeof(TicketAppContext))]
-    [Migration("20230407133131_TicketContextInit")]
-    partial class TicketContextInit
+    partial class TicketAppContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,6 +26,9 @@ namespace TaskAssignmentApp.Persistance.TaskAssignmentApp.Persistance.ORM.Entity
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -8,6 +8,7 @@ using TaskAssignmentApp.Application.Dtos;
 using TaskAssignmentApp.Application.Services;
 using TaskAssignmentApp.Application.Validators;
 using TaskAssignmentApp.Persistance.ORM.EntityFramework.Contexts;
+using TaskAssignmentApp.Persistance.ORM.EntityFramework.Identity;
 using TaskAssignmentAppNTier.Middlewares;
 using TaskAssignmentAppNTier.ServiceExtensions;
 
@@ -36,6 +37,22 @@ namespace TaskAssignmentAppNTier
       {
         opt.UseSqlServer(builder.Configuration.GetConnectionString("TicketConn"));
       });
+
+      builder.Services.AddDbContext<AppIdentityContext>(opt =>
+      {
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("TicketConn"));
+      });
+
+
+      builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(opt =>
+      {
+        opt.User.RequireUniqueEmail = true;
+        opt.Password.RequireDigit = true;
+        opt.Password.RequireLowercase = true;
+        opt.Password.RequireUppercase = true;
+        opt.Password.RequireNonAlphanumeric = false;
+
+      }).AddEntityFrameworkStores<AppIdentityContext>();
 
       builder.Services.AddApplicationServices();
       builder.Services.AddTicketServices();
@@ -68,7 +85,8 @@ namespace TaskAssignmentAppNTier
       app.MapControllers(); // request controllara düþsün diye
 
 
-      app.UseMiddleware<ExceptionMiddleware>();
+      app.UseException();
+      //app.UseMiddleware<ExceptionMiddleware>();
 
 
       var summaries = new[]

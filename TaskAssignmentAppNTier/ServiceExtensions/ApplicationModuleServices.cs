@@ -3,6 +3,7 @@ using TaskAssigmentApp.Domain.Services;
 using TaskAssignmentApp.Application.Dtos;
 using TaskAssignmentApp.Application.Services;
 using TaskAssignmentApp.Application.Validators;
+using TaskAssignmentApp.Infrastructure.Token.JWT;
 
 namespace TaskAssignmentAppNTier.ServiceExtensions
 {
@@ -27,6 +28,9 @@ namespace TaskAssignmentAppNTier.ServiceExtensions
 
 
       services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TicketAssignmentValidator>()); // controller implemente olsun diye
+
+
+      services.AddSingleton<IAccessTokenService, JwtTokenService>();
 
       return services;
     }
