@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  taskassignmentappntier:
+    image: ${DOCKER_REGISTRY-}taskassignmentappntier
+    build:
+      context: .
+      dockerfile: TaskAssignmentAppNTier/Dockerfile

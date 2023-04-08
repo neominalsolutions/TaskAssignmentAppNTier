@@ -7,11 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskAssignmentAppNTier", "T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskAssigmentApp.Domain", "TaskAssigmentApp.Domain\TaskAssigmentApp.Domain.csproj", "{EA026688-B3EA-42EE-ABD3-CB8A73C1548E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskAssignmentApp.Application", "TaskAssignmentApp.Application\TaskAssignmentApp.Application.csproj", "{E13CEBE8-D1F4-4F53-99E1-45E1077A3C99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskAssignmentApp.Application", "TaskAssignmentApp.Application\TaskAssignmentApp.Application.csproj", "{E13CEBE8-D1F4-4F53-99E1-45E1077A3C99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskAssignmentApp.Infrastructure", "TaskAssignmentApp.Infrastructure\TaskAssignmentApp.Infrastructure.csproj", "{DF8D3097-96B1-4CDA-AA10-62A9E1401301}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskAssignmentApp.Infrastructure", "TaskAssignmentApp.Infrastructure\TaskAssignmentApp.Infrastructure.csproj", "{DF8D3097-96B1-4CDA-AA10-62A9E1401301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskAssignmentApp.Persistance", "TaskAssignmentApp.Persistance\TaskAssignmentApp.Persistance.csproj", "{C2481B40-F42C-426D-8ED1-E4DCD2D3528E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskAssignmentApp.Persistance", "TaskAssignmentApp.Persistance\TaskAssignmentApp.Persistance.csproj", "{C2481B40-F42C-426D-8ED1-E4DCD2D3528E}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{17BB2027-D94D-49B7-ACA2-24FE14EAD6C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C2481B40-F42C-426D-8ED1-E4DCD2D3528E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2481B40-F42C-426D-8ED1-E4DCD2D3528E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2481B40-F42C-426D-8ED1-E4DCD2D3528E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17BB2027-D94D-49B7-ACA2-24FE14EAD6C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17BB2027-D94D-49B7-ACA2-24FE14EAD6C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17BB2027-D94D-49B7-ACA2-24FE14EAD6C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17BB2027-D94D-49B7-ACA2-24FE14EAD6C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
