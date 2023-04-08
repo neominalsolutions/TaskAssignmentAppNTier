@@ -1,12 +1,17 @@
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Reflection;
+using System.Text;
 using TaskAssigmentApp.Domain.Services;
 using TaskAssignmentApp.Application.Dtos;
 using TaskAssignmentApp.Application.Services;
 using TaskAssignmentApp.Application.Validators;
+using TaskAssignmentApp.Infrastructure.Token.JWT;
 using TaskAssignmentApp.Persistance.ORM.EntityFramework.Contexts;
 using TaskAssignmentApp.Persistance.ORM.EntityFramework.Identity;
 using TaskAssignmentAppNTier.Middlewares;
@@ -22,10 +27,44 @@ namespace TaskAssignmentAppNTier
 
       // Add services to the container.
       builder.Services.AddAuthorization();
+      builder.Services.AddHttpContextAccessor(); // classlar üzerinden IHttpContextAccessor servicene eriþebilmek için bunu ekledik.
 
       // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
       builder.Services.AddEndpointsApiExplorer();
-      builder.Services.AddSwaggerGen();
+      //builder.Services.AddSwaggerGen();
+
+      // swagger api authenticate olmak için header üzerinden beaerer Access token test etme iþlemi
+      builder.Services.AddSwaggerGen(opt =>
+      {
+
+        var securityScheme = new OpenApiSecurityScheme()
+        {
+          Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+          Name = "Authorization",
+          In = ParameterLocation.Header,
+          Type = SecuritySchemeType.Http,
+          Scheme = JwtBearerDefaults.AuthenticationScheme,
+          BearerFormat = "JWT" // Optional
+        };
+
+        var securityRequirement = new OpenApiSecurityRequirement
+{
+    {
+        new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = "bearerAuth"
+            }
+        },
+        new string[] {}
+    }
+};
+
+        opt.AddSecurityDefinition("bearerAuth", securityScheme);
+        opt.AddSecurityRequirement(securityRequirement);
+      });
 
 
 
@@ -42,6 +81,30 @@ namespace TaskAssignmentAppNTier
       {
         opt.UseSqlServer(builder.Configuration.GetConnectionString("TicketConn"));
       });
+
+      var key = Encoding.ASCII.GetBytes(JWTSettings.SecretKey);
+
+      // kimlik doðrulama yöntemini tanýtýrýz.
+      // servis olarak tanýttýk
+      builder.Services.AddAuthentication(x =>
+      {
+        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+      })
+            .AddJwtBearer(x =>
+            {
+              x.RequireHttpsMetadata = true;
+              x.SaveToken = true;
+              x.TokenValidationParameters = new TokenValidationParameters
+              {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true
+              };
+
+            });
 
 
       builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(opt =>
@@ -79,7 +142,7 @@ namespace TaskAssignmentAppNTier
 
  
       app.UseHttpsRedirection();
-
+      app.UseAuthentication(); // middleware aktif ettik.
       app.UseAuthorization();
 
       app.MapControllers(); // request controllara düþsün diye

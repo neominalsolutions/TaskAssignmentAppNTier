@@ -58,7 +58,7 @@ namespace TaskAssignmentApp.Application.Handlers
 
           claims.Add(new Claim(ClaimTypes.Email, user.Email));
           claims.Add(new Claim("sub", user.Id));
-          claims.Add(new Claim("roles", string.Join(",",roles)));
+          claims.Add(new Claim(ClaimTypes.Role, string.Join(",",roles)));
 
           // JWT ile Token generate et ve claimsleri token içerisine göm
 
@@ -66,6 +66,12 @@ namespace TaskAssignmentApp.Application.Handlers
 
           var identity = new ClaimsIdentity(claims);
           var tokenResponse = this.jwtTokenService.CreateAccessToken(identity);
+
+
+          user.RefreshToken = tokenResponse.RefreshToken;
+          user.RefreshTokenExpireAt = DateTime.Now.AddMinutes(45);
+
+          await userManager.UpdateAsync(user);
 
           return tokenResponse;
 

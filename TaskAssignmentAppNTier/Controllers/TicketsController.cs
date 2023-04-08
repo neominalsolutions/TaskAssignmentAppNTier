@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskAssigmentApp.Domain.Entities;
 using TaskAssigmentApp.Domain.Services;
 using TaskAssignmentApp.Application.Dtos;
 using TaskAssignmentApp.Application.Services;
+using TaskAssignmentAppNTier.Attributes;
 
 namespace TaskAssignmentAppNTier.Controllers
 {
@@ -45,11 +49,17 @@ namespace TaskAssignmentAppNTier.Controllers
     }
 
 
+    
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] // http header üzerinden access token gönderilmez ise bu durumda 401 status code
     [HttpPost("assing-new")]
+    [Role("SuperVisor","admin","manager")]
+    
+    //[Permission("create-user")]
     public async Task<IActionResult> AssignTicketApplicationLayer([FromBody] TicketAssignmentRequestDto dto)
     {
 
-     var response =  await _ticketAssignment.HandleAsync(dto);
+      var result = await HttpContext.AuthenticateAsync(scheme: JwtBearerDefaults.AuthenticationScheme);
+      var response =  await _ticketAssignment.HandleAsync(dto);
 
       // var response = mediator.HandleAsync(request);
       return Ok(response);
