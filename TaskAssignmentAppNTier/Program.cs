@@ -131,6 +131,17 @@ namespace TaskAssignmentAppNTier
 
       // File IO iþlemleri, Db iþlemleri için web request bazlý iþlemler için scope service tercih ediyoruz.
 
+      // api js uygulamarýn istek atmasý için defautda cors yani cross origin request kapalý bunun  dýþarý aýlmasý lazým.
+      builder.Services.AddCors(opt=>
+      {
+        opt.AddDefaultPolicy(policy =>
+        {
+          policy.AllowAnyHeader(); // js den gelen bütün header deðerlerine izin ver
+          policy.AllowAnyMethod(); // js post,put,delete,get istekleri atýlabilir
+          policy.AllowAnyOrigin(); // herhangi bir domain üzerinden istek atamaya izin ver. www.a.com wwww.b.com
+        });
+      });
+
       var app = builder.Build();
 
       // Configure the HTTP request pipeline.
@@ -170,6 +181,8 @@ namespace TaskAssignmentAppNTier
         return forecast;
       })
       .WithName("GetWeatherForecast");
+
+      app.UseCors();
 
       app.Run();
     }
