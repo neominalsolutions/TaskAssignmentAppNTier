@@ -1,8 +1,8 @@
 ﻿
 TicketAppContext Migration
 
-Add-Migration <MigrationName> -c TicketAppContext  -o "TaskAssignmentApp.Persistance/ORM/EntityFramework/Migrations"
-Update-Database -c TicketAppContext
+Add-Migration <MigrationName> -context TicketAppContext  -o "ORM/EntityFramework/Migrations/TicketAppDb"
+Update-Database -context TicketAppContext
 
 
 IdentityContext Migration

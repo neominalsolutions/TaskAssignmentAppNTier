@@ -20,6 +20,7 @@ namespace TaskAssigmentApp.Domain.SeedWork
     /// <returns></returns>
     Task<List<TEntity>> WhereAsync(Expression<Func<TEntity, bool>> expression);
 
+    Task<List<TEntity>> ToListAsync();
 
     /// <summary>
     /// Veri tabanına kayıt atma işlemi

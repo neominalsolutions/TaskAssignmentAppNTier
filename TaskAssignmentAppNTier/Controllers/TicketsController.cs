@@ -17,11 +17,13 @@ namespace TaskAssignmentAppNTier.Controllers
   {
     private readonly ITicketAssignmentCheckService _ticketAssignmentCheckService;
     private readonly ITicketAssignment _ticketAssignment;
+    private readonly ITicketRepository ticketRepository;
 
-    public TicketsController(ITicketAssignmentCheckService ticketAssignmentCheckService, ITicketAssignment ticketAssignment)
+    public TicketsController(ITicketAssignmentCheckService ticketAssignmentCheckService, ITicketAssignment ticketAssignment, ITicketRepository ticketRepository)
     {
       _ticketAssignmentCheckService = ticketAssignmentCheckService;
       _ticketAssignment = ticketAssignment;
+      this.ticketRepository = ticketRepository;
     }
 
     [HttpPost("assign-old")]
@@ -62,6 +64,22 @@ namespace TaskAssignmentAppNTier.Controllers
       var response =  await _ticketAssignment.HandleAsync(dto);
 
       // var response = mediator.HandleAsync(request);
+      return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetTickets()
+    {
+      var model = await ticketRepository.ToListAsync(); // hepsini getir. employee ve ticket değerleri joinleniş olarak gelecek.
+
+      var response = model.Select(a => new TicketRequestDto
+      {
+        Description = a.Description,
+        EmployeeName = $"{a.Employee.Name} {a.Employee.SurName}",
+        Id = a.Id,
+        WorkingHour = a.WorkingHour
+      }).ToList();
+
       return Ok(response);
     }
 

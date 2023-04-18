@@ -148,7 +148,7 @@ namespace TaskAssignmentAppNTier
       app.MapControllers(); // request controllara düþsün diye
 
 
-      app.UseException();
+      //app.UseException();
       //app.UseMiddleware<ExceptionMiddleware>();
 
 

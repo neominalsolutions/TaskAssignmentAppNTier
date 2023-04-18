@@ -25,6 +25,9 @@ namespace TaskAssigmentApp.Domain.Entities
 
     public string EmployeeId { get; set; }
 
+    public Employee Employee { get; set; }
+
+
 
     /// <summary>
     /// Ne kadarlık bir iş

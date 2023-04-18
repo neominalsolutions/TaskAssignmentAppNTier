@@ -44,6 +44,7 @@ namespace TaskAssignmentAppNTier.Controllers
     }
 
 
+    [HttpPost("revokeAccessToken")]
     public async Task<IActionResult> RevokeAccessToken()
     {
       // ilgili user bulup revoke edelim;

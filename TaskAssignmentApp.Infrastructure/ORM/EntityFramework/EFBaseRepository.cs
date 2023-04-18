@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TaskAssigmentApp.Domain.SeedWork;
@@ -29,7 +30,12 @@ namespace TaskAssignmentApp.Infrastructure.ORM.EntityFramework
       await dbContext.SaveChangesAsync();
     }
 
-    public virtual async Task<List<TEntity>> WhereAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> expression)
+    public virtual async Task<List<TEntity>> ToListAsync()
+    {
+      return await dbSet.ToListAsync();
+    }
+
+    public virtual async Task<List<TEntity>> WhereAsync(System.Linq.Expressions.Expression<Func<TEntity, bool>> expression = null)
     {
       return await dbSet.Where(expression).ToListAsync();
     }

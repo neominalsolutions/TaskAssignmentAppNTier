@@ -12,12 +12,6 @@ namespace TaskAssigmentApp.Domain.Entities
     public string Name { get; private set; }
     public string SurName { get; private set; }
 
-    // nesnenin farklı context olduğu için navigation property nesne geçmiyoruz
-    // sadece id verdik denormalize olarak tuttuk.
-    public string? ApplicationUserId { get; set; }
-
-
-
     public Employee()
     {
 
