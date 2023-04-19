@@ -7,5 +7,5 @@ Update-Database -context TicketAppContext
 
 IdentityContext Migration
 
-Add-Migration <MigrationName> -context IdentityContext  -o "ORM/EntityFramework/Migrations/IdentityDb"
-Update-Database -context IdentityContext
+Add-Migration <MigrationName> -context AppIdentityContext  -o "ORM/EntityFramework/Migrations/IdentityDb"
+Update-Database -context AppIdentityContext
