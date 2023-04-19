@@ -88,8 +88,11 @@ namespace TaskAssignmentAppNTier.Controllers
     }
 
 
-    [HttpGet] // api/tickets?employeeId=1
-    public async Task<IActionResult> GetTicketByEmployeeId([FromQuery] string employeeId)
+
+
+
+    [HttpGet("/api/tickets/{employeeId}")] // api/tickets?employeeId=1
+    public async Task<IActionResult> GetTicketByEmployeeId(string employeeId)
     {
 
       if (employeeId == null)
@@ -97,7 +100,7 @@ namespace TaskAssignmentAppNTier.Controllers
 
 
 
-      var model = await ticketRepository.WhereAsync(x=> x.EmployeeId == employeeId); // hepsini getir. employee ve ticket değerleri joinleniş olarak gelecek.
+      var model = await ticketRepository.WhereAsync(x => x.EmployeeId == employeeId); // hepsini getir. employee ve ticket değerleri joinleniş olarak gelecek.
 
       var response = model.Select(a => new TicketRequestDto
       {
