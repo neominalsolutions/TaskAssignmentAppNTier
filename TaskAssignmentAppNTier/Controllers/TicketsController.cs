@@ -81,7 +81,9 @@ namespace TaskAssignmentAppNTier.Controllers
         Description = a.Description,
         EmployeeName = $"{a.Employee.Name} {a.Employee.SurName}",
         Id = a.Id,
-        WorkingHour = a.WorkingHour
+        WorkingHour = a.WorkingHour,
+        StartDate = a.StartDate,
+        EndDate = a.EndDate
       }).ToList();
 
       return Ok(response);
@@ -107,7 +109,10 @@ namespace TaskAssignmentAppNTier.Controllers
         Description = a.Description,
         EmployeeName = $"{a.Employee.Name} {a.Employee.SurName}",
         Id = a.Id,
-        WorkingHour = a.WorkingHour
+        WorkingHour = a.WorkingHour,
+        StartDate = a.StartDate,
+        EndDate = a.EndDate
+
       }).ToList();
 
       return Ok(response);

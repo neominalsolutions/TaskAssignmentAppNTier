@@ -13,5 +13,8 @@ namespace TaskAssignmentApp.Application.Dtos
     public string Description { get; set; }
     public string EmployeeName { get; set; }
     public int WorkingHour { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
+
   }
 }
