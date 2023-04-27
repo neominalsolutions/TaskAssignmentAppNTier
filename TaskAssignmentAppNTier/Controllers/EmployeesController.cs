@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TaskAssigmentApp.Domain.Services;
 using TaskAssignmentApp.Application.Dtos;
+using TaskAssignmentApp.Infrastructure.Token.JWT;
 
 namespace TaskAssignmentAppNTier.Controllers
 {
@@ -18,6 +22,7 @@ namespace TaskAssignmentAppNTier.Controllers
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetEmployee()
     {
       var employees = await this.employeeRepository.ToListAsync();

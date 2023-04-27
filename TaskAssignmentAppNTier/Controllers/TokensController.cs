@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
 using TaskAssignmentApp.Application.Dtos;
@@ -55,24 +57,27 @@ namespace TaskAssignmentAppNTier.Controllers
 
     [HttpPost("refreshToken")]
     [ProducesResponseType(statusCode: StatusCodes.Status200OK, Type = typeof(TokenResponseDto))]
-    [ProducesErrorResponseType(typeof(AuthenticationFailedException))]
-    [Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto @request)
     {
 
-      var claims = HttpContext.User.Claims.ToList();
+      var user = this.userManager.Users.FirstOrDefault(x => x.RefreshToken == request.RefreshToken);
 
-    
-
-    
-        var userId = HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
-
-         var user =  await this.userManager.FindByIdAsync(userId);
+      if (user != null)
+      {
 
         // client ve sunucu eşlemesini kontrol et
-        if(user.RefreshToken == request.RefreshToken && user.RefreshTokenExpireAt == request.RefreshTokenExpireAt && user.RefreshTokenRevoked != false)
+        if (user.RefreshToken == request.RefreshToken)
         {
-          var token = this.accessTokenService.CreateAccessToken(new System.Security.Claims.ClaimsIdentity(HttpContext.User.Claims));
+
+          var claims = new List<Claim>();
+
+          var roles = this.userManager.GetRolesAsync(user);
+
+          claims.Add(new Claim(ClaimTypes.Email, user.Email));
+          claims.Add(new Claim("sub", user.Id));
+          claims.Add(new Claim(ClaimTypes.Role, string.Join(",", roles)));
+
+          var token = this.accessTokenService.CreateAccessToken(new System.Security.Claims.ClaimsIdentity(claims));
 
           user.RefreshToken = token.RefreshToken;
           user.RefreshTokenExpireAt = DateTime.Now.AddMinutes(45);
@@ -81,6 +86,10 @@ namespace TaskAssignmentAppNTier.Controllers
 
           return Ok(token);
         }
+
+      }
+
+
 
 
       return BadRequest();

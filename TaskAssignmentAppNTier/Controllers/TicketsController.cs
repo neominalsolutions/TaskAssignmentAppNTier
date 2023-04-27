@@ -13,6 +13,7 @@ namespace TaskAssignmentAppNTier.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
   public class TicketsController : ControllerBase
   {
     private readonly ITicketAssignmentCheckService _ticketAssignmentCheckService;

@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace TaskAssignmentApp.Application.Dtos
 {
   public class RefreshTokenRequestDto
   {
-    public string AcessToken { get; set; }
-    public string RefreshToken { get; set; }
+    [JsonPropertyName("accessToken")]
+    public string AccessToken { get; set; }
 
-    public DateTime? RefreshTokenExpireAt { get; set; }
+    [JsonPropertyName("refreshToken")]
+    public string RefreshToken { get; set; }
 
 
   }
