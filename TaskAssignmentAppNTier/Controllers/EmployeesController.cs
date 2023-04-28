@@ -22,7 +22,7 @@ namespace TaskAssignmentAppNTier.Controllers
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public async Task<IActionResult> GetEmployee()
     {
       var employees = await this.employeeRepository.ToListAsync();
