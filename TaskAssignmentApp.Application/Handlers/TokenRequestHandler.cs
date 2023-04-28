@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace TaskAssignmentApp.Application.Handlers
         if(passwordCheck)
         {
           // user claim tablosuna baktığından boş
-          var claims = await this.userManager.GetClaimsAsync(user); // kullanıcıya tanımlanmış olan tüm permission değerlerini okuduk.
+          var permissionClaims = await this.userManager.GetClaimsAsync(user); // kullanıcıya tanımlanmış olan tüm permission değerlerini okuduk.
           var roles = await this.userManager.GetRolesAsync(user);
 
           foreach (var roleName in roles)
@@ -50,15 +51,19 @@ namespace TaskAssignmentApp.Application.Handlers
 
             foreach (var roleClaim in roleClaims)
             {
-              claims.Add(roleClaim);
+              permissionClaims.Add(roleClaim);
             }
           }
 
-          
-
+         
+          var claims = new List<Claim>();
           claims.Add(new Claim(ClaimTypes.Email, user.Email));
           claims.Add(new Claim("sub", user.Id));
           claims.Add(new Claim(ClaimTypes.Role, string.Join(",",roles)));
+
+        
+
+          claims.Add(new Claim("permissions", System.Text.Json.JsonSerializer.Serialize(permissionClaims.Select(a => new { Key = a.Type, Value = a.Value }))));
 
           // JWT ile Token generate et ve claimsleri token içerisine göm
 
