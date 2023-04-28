@@ -76,13 +76,14 @@ namespace TaskAssignmentAppNTier.Controllers
           claims.Add(new Claim(ClaimTypes.Email, user.Email));
           claims.Add(new Claim("sub", user.Id));
           claims.Add(new Claim(ClaimTypes.Role, string.Join(",", roles)));
+          claims.Add(new Claim("permissions", System.Text.Json.JsonSerializer.Serialize("[]")));
 
           var token = this.accessTokenService.CreateAccessToken(new System.Security.Claims.ClaimsIdentity(claims));
 
-          user.RefreshToken = token.RefreshToken;
-          user.RefreshTokenExpireAt = DateTime.Now.AddMinutes(45);
+          //user.RefreshToken = token.RefreshToken;
+          //user.RefreshTokenExpireAt = DateTime.Now.AddMinutes(45);
 
-          await userManager.UpdateAsync(user);
+          //await userManager.UpdateAsync(user);
 
           return Ok(token);
         }
