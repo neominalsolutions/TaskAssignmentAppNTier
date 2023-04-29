@@ -92,6 +92,28 @@ namespace TaskAssignmentAppNTier.Controllers
 
 
 
+    [HttpGet("/api/ticketsById")] // api/tickets?employeeId=1
+    public async Task<IActionResult> getTicketById(string ticketId)
+    {
+
+      if (ticketId == null)
+        return NotFound();
+
+
+
+      var model = (await ticketRepository.WhereAsync(x => x.Id == ticketId)).FirstOrDefault(); // hepsini getir. employee ve ticket değerleri joinleniş olarak gelecek.
+
+      var response = new TicketRequestDto
+      {
+        Id = model.Id,
+        Description = model.Description,
+        EmployeeName = model.Employee.Name
+      };
+
+      return Ok(response);
+    }
+
+
 
 
     [HttpGet("/api/tickets/{employeeId}")] // api/tickets?employeeId=1
